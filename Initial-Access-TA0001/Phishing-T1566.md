@@ -66,23 +66,7 @@ DeviceProcessEvents
 | order by Timestamp desc
 ```
 
-**4. Drive-by Compromise:**
-
-Query to help to detect script executed by browsers to detect driver-by compromise, where the attackers redirect the users to compromised websites to download those scripts:
-
-```
-// Detect execution of scripts or downloads initiated by web browsers
-DeviceProcessEvents
-| where InitiatingProcessFileName in~ ("chrome.exe", "firefox.exe", "iexplore.exe", "edge.exe", "safari.exe")
-    // Add or remove browsers as necessary
-| where FileName endswith ".exe" or FileName endswith ".dll" or FileName endswith ".js" or FileName endswith ".vbs"
-    // Include file types that could be maliciously downloaded
-| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine, 
-InitiatingProcessParentFileName
-| order by Timestamp desc
-```
-
-**5. Detect Word Document Macro Execution from Email Client:**
+**4. Detect Word Document Macro Execution from Email Client:**
 
 This query focuses on the DeviceProcessEvents table and uses the parent-child process relationship to spot Microsoft Word (winword.exe) executing known dangerous child processes:
 
@@ -91,7 +75,7 @@ DeviceProcessEvents
 // 1. Filter the ultimate process being executed (the malicious payload runner)
 | where FileName in ('cmd.exe', 'powershell.exe', 'pwsh.exe', 'cscript.exe', 'wscript.exe', 'mshta.exe', 'bitsadmin.exe', 'certutil.exe')
 // 2. Filter the immediate parent process (the document reader) to Microsoft Word
-| where InitiatingProcessFileName =~ "winword.exe"
+| where InitiatingProcessFileName =~ ("winword.exe", "excel.exe", "outlook.exe")
 // 3. Filter the grandparent process (the launcher of the document) to common email clients
 | where InitiatingProcessParentFileName in ('outlook.exe', 'thunderbird.exe', 'mail.exe', 'opera.exe') // Add other relevant mail clients if needed
 | project

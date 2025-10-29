@@ -55,6 +55,15 @@ kql
 // KQL Query starts here...
 ```
 
-## 💡 Connect
+## 🌐 Connect
 
 If you have questions, feedback, or want to discuss threat hunting, please open an issue!
+
+## 🔗 Helpful Links where you can find more queries:
+
+[https://github.com/francoisfried/Defender-Advanced-Hunting-Queries](https://github.com/francoisfried/Defender-Advanced-Hunting-Queries)
+[https://github.com/SlimKQL/Hunting-Queries-Detection-Rules](https://github.com/SlimKQL/Hunting-Queries-Detection-Rules)
+[https://github.com/microsoft/Microsoft-365-Defender-Hunting-Queries](https://github.com/microsoft/Microsoft-365-Defender-Hunting-Queries)
+[https://github.com/Bert-JanP/Hunting-Queries-Detection-Rules](https://github.com/Bert-JanP/Hunting-Queries-Detection-Rules)
+[https://github.com/LearningKijo/KQL](https://github.com/LearningKijo/KQL)
+[https://github.com/RoqueNight/DefenderATP-Proactive-Threat-Hunting-Queries-KQL](https://github.com/RoqueNight/DefenderATP-Proactive-Threat-Hunting-Queries-KQL)
