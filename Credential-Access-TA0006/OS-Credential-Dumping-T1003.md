@@ -36,10 +36,32 @@ DeviceProcessEvents
 | project Timestamp, DeviceName, AccountName, InitiatingProcessCommandLine
 ```
 
+Checking for LSASS dump with known tools:
+
 ```
-DeviceProcessEvents | where (FileName has_any ("procdump.exe", "procdump64.exe") and ProcessCommandLine has "lsass") or 
+DeviceProcessEvents
 // Looking for Accepteula flag or Write a dump file with all process memory
-(ProcessCommandLine has "lsass.exe" and (ProcessCommandLine has "-accepteula" or ProcessCommandLine contains "-ma"))
+| where (FileName has_any ("procdump.exe", "procdump64.exe") and ProcessCommandLine has "lsass") or (ProcessCommandLine has "lsass.exe" and (ProcessCommandLine has "-accepteula" or ProcessCommandLine contains "-ma"))
+```
+
+```
+DeviceProcessEvents 
+| where InitiatingProcessFileName in ("mimikatz.exe", "procdump.exe", "rundll32.exe", "powershell.exe", "taskmgr.exe", "cmd.exe", "wmiprvse.exe") 
+| where ProcessCommandLine has "lsass" or InitiatingProcessCommandLine has "lsass" 
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine 
+| order by Timestamp desc
+```
+
+Narrow the search to specific devices and process:
+
+```
+DeviceEvents 
+| where ActionType in ("OpenProcessApiCall", "ReadProcessMemoryApiCall", "CreateRemoteThreadApiCall", "NtAllocateVirtualMemoryApiCall", "NtMapViewOfSectionRemoteApiCall", "WriteToLsassProcessMemory", "SetThreadContextRemoteApiCall") 
+| where FileName == "lsass.exe"  // Target LSASS process 
+| where InitiatingProcessFileName == "wmiprvse.exe"  // Detect WMI abuse 
+| where DeviceName has "Laptop-123" 
+| project Timestamp, DeviceName, FileName, InitiatingProcessFileName, InitiatingProcessCommandLine, InitiatingProcessParentFileName 
+| order by Timestamp desc 
 ```
 
 **2. SAM/SYSTEM File Access for Dumping**
