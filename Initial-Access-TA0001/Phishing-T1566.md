@@ -89,3 +89,13 @@ DeviceProcessEvents
     FolderPath,
     ActionType
 ```
+
+Filtering by execution of cmd, powershell, explorer, cscript and vmi creating a child process with wmi or wscript:
+
+```
+DeviceProcessEvents 
+| where FileName in ("wmiprvse.exe", "wscript.exe") 
+| where InitiatingProcessFileName in ("wscript.exe", "explorer.exe", "wmiprvse.exe", "cmd.exe", "powershell.exe") 
+| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine 
+| order by Timestamp desc 
+```
