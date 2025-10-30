@@ -22,7 +22,7 @@ The core structure is organized by MITRE ATT&CK Tactics:
 ## 🔎 How to Use
 
 1.  **Identify Your Target:** Determine which **MITRE ATT&CK Tactic** or **Technique** you want to hunt for.
-2.  **Navigate:** Go to the corresponding folder (e.g., `Persistence-TA0003`).
+2.  **Navigate:** Go to the corresponding folder (e.g., `TA0003-Persistence`).
 3.  **Select Query:** Choose the `md` file for the specific technique (e.g., `Registry-Run-Keys-Startup-Folder-T1547.001-T1547.001.md`).
 4.  **Copy & Paste:** Copy the entire KQL code.
 5.  **Execute:** Paste the query into the **Advanced Hunting** section of the Microsoft Defender XDR portal and run it.
