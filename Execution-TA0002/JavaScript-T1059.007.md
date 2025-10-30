@@ -43,7 +43,7 @@ https://github.com/microsoft/Microsoft-365-Defender-Hunting-Queries/blob/master/
 ```
 DeviceProcessEvents 
 | where InitiatingProcessFileName in~('winword.exe', 'excel.exe', 'outlook.exe') 
-| where FileName =~ "wscript.exe" and ProcessCommandLine has ".jse" 
+| where FileName =~ "wscript.exe" and ProcessCommandLine has ".jse" or ProcessCommandLine has "JS"
 ```
 
 **2. Script Hosts Spawning Malicious Binaries:**
