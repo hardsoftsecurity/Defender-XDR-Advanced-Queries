@@ -22,8 +22,8 @@ The core structure is organized by MITRE ATT&CK Tactics:
 ## 🔎 How to Use
 
 1.  **Identify Your Target:** Determine which **MITRE ATT&CK Tactic** or **Technique** you want to hunt for.
-2.  **Navigate:** Go to the corresponding folder (e.g., `TA0003_Persistence`).
-3.  **Select Query:** Choose the `.kql` file for the specific technique (e.g., `T1547.001_Registry_Run_Keys.kql`).
+2.  **Navigate:** Go to the corresponding folder (e.g., `Persistence-TA0003`).
+3.  **Select Query:** Choose the `md` file for the specific technique (e.g., `Registry-Run-Keys-Startup-Folder-T1547.001-T1547.001.md`).
 4.  **Copy & Paste:** Copy the entire KQL code.
 5.  **Execute:** Paste the query into the **Advanced Hunting** section of the Microsoft Defender XDR portal and run it.
 6.  **Analyze:** Review the results for potential threats or suspicious activity.
@@ -34,8 +34,8 @@ This repository thrives on community contributions! We welcome and encourage sub
 
 ### Guidelines for Submissions:
 
-1.  **Format:** Queries must be in a `.kql` file and fully functional in Microsoft Defender XDR Advanced Hunting.
-2.  **Naming:** Name your file using the format: `[Descriptive Name]_[Technique ID].kql` (e.g., `PowerShell_Execution_Detection_T1059.001.kql`).
+1.  **Format:** Queries must be in a `.md` file with a clear description of the technique and fully functional in Microsoft Defender XDR Advanced Hunting.
+2.  **Naming:** Name your file using the format: `[Descriptive Name]_[Technique ID].md` (e.g., `PowerShell_Execution_Detection_T1059.001.md`).
 3.  **Location:** Place the query file in the folder corresponding to its primary **MITRE Tactic**.
 4.  **Header Comments:** Each query **must** include a header section with:
     * **Technique ID & Name**
