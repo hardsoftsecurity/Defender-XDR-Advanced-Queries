@@ -27,9 +27,51 @@ This section focuses on KQL queries designed to detect the **abnormal frequency 
 Identification of the execution of net.exe targeting domain users and domain administrators:
 
 ```
-DeviceProcessEvents 
-| where FileName in ("net.exe", "net1.exe") 
-| where ProcessCommandLine has_any ("net  group \"domain admins\" /domain ", "net  users /domain") 
-| project Timestamp, DeviceName, FileName, ProcessCommandLine, InitiatingProcessFileName, InitiatingProcessCommandLine 
-| order by Timestamp desc 
+DeviceProcessEvents
+| where Timestamp > ago(24h)
+| where FileName =~ "net.exe" or FileName =~ "net1.exe"
+| where ProcessCommandLine has_any("/domain", "group", "user")
+| where ProcessCommandLine has_any("Domain Admins", "Enterprise Admins", "Schema Admins")
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine
+| order by Timestamp desc
+```
+
+**2. PowerShell ADSI/LDAP Reconnaissance:**
+
+Advanced attackers avoid net.exe to bypass basic command-line logging and instead use PowerShell to query LDAP directly via ADSI searchers:
+
+```
+DeviceProcessEvents
+| where Timestamp > ago(24h)
+| where ProcessCommandLine has_all("adsisearcher", "findall")
+    or ProcessCommandLine has_all("LDAP://", "objectClass=user")
+| project Timestamp, DeviceName, AccountName, ProcessCommandLine, InitiatingProcessParentFileName
+| order by Timestamp desc
+```
+
+**3. BloodHound/SharpHound Execution:**
+
+SharpHound is the primary ingestor for BloodHound. It uses specific flags to collect data about domain accounts and their relationships:
+
+```
+DeviceProcessEvents
+| where Timestamp > ago(24h)
+| where ProcessCommandLine has_any("--CollectionMethod", "-CollectionMethod", "DCOnly", "All,Group", "All")
+    or FileName =~ "SharpHound.exe"
+| project Timestamp, DeviceName, AccountName, FileName, ProcessCommandLine
+| order by Timestamp desc
+```
+
+**4. Unusual Domain Controller Queries (IdentityInfo):**
+
+This query identifies when a workstation that doesn't typically perform administrative tasks suddenly starts enumerating a high volume of domain accounts:
+
+```
+IdentityQueryEvents
+| where Timestamp > ago(24h)
+| where QueryType == "LDAP query"
+| summarize QueryCount = count() by DeviceName, AccountName, QueryTarget
+| where QueryCount > 100
+| project DeviceName, AccountName, QueryCount, QueryTarget
+| order by QueryCount desc
 ```
